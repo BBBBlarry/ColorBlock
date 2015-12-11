@@ -1,16 +1,30 @@
 
-var blockSide;
-var horizontalBlock, verticalBlock;
+/**** USER-DEFINE VARIABLES ****/
 
-var SHORTHANDBLOCK = 4;
+var SHORTHANDBLOCK = 4; //how many blocks you'd like
+var MODE = "FLASH"; //FLIP or FLASH
+var SPEED = "AUTO"; // AUTO or set a time in ms
 
-var colors = {
+
+var colors = { //add colors here
   0: "#1abc9c", //TURQUOISE
   1: "#2ecc71",  //EMERALD
   2: "#3498db",  //PETERRIVER
   3: "#e67e22",  //CARROT
   4: "#e74c3c"  //ALIZARIN
 };
+
+
+
+
+
+
+
+/**** Don't worry anything beyond this ****/
+
+var blockSide;
+var horizontalBlock, verticalBlock;
+
 
 function size_dict(d){c=0; for (i in d) ++c; return c}
 
@@ -64,21 +78,43 @@ for(var i = 0; i < totalBlock; i++){
 
 
 function flipABlock(){
+
     var blockIndex = Math.floor(Math.random() * (totalBlock-1));
     var blockColorIndex = Math.floor(Math.random() * size_dict(colors));
-    if(rotated[blockIndex] == 0){
-      $("#block-"+blockIndex).transition({rotateY: 180});
-      rotated[blockIndex] = 1;
-    }else{
-      $("#block-"+blockIndex).transition({rotateY: 0});
-      rotated[blockIndex] = 0;
+    if(MODE == "FLIP"){
+      if(rotated[blockIndex] == 0){
+        $("#block-"+blockIndex).transition({rotateY: 180});
+        rotated[blockIndex] = 1;
+      }else{
+        $("#block-"+blockIndex).transition({rotateY: 0});
+        rotated[blockIndex] = 0;
+      }
     }
     $("#block-"+blockIndex).css("background-color", colors[blockColorIndex]);
+
+}
+
+
+function start(){
+  if(SPEED == "AUTO"){
+    if(MODE == "FLASH"){
+      setInterval("flipABlock()", 2);
+      return;
+    }
+    if(MODE == "FLIP"){
+      setInterval("flipABlock()", 3000);
+      setInterval("flipABlock()", 7000);
+      return;
+    }
+  }else{
+    setInterval("flipABlock()", SPEED);
+  }
 }
 
 flipABlock();
-setInterval("flipABlock()", 3000);
-setInterval("flipABlock()", 7000);
+start();
+
+
 
 /*
 var w = new Worker("blockWorker.js");
